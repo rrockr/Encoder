@@ -1,8 +1,8 @@
 ## Compile
 
 javac -sourcepath ./src/ -d ./bin/ ./src/Main.java
-jar cf ./lib/Main.jar ./bin/Main.class
+jar cfe ./lib/Main.jar Main -C ./bin/ .
 
 ## Run
 
-java -cp ./bin Main input.txt
+java -jar ./lib/Main.jar input.txt
