@@ -21,8 +21,9 @@ public class Encoder {
         for (int i = 0; i < plainTextUpper.length(); i++) {
             Character plainChar = plainTextUpper.charAt(i);
             Integer plainCharIndex = characterMap.get(plainChar);
+            boolean isPlainCharEncodable = plainCharIndex != null;
 
-            if (plainCharIndex != null && offset != null) {
+            if (isPlainCharEncodable) {
                 int wrappedIndex = (plainCharIndex - offset) % mappingSize;
                 wrappedIndex = wrappedIndex >= 0 ? wrappedIndex : wrappedIndex + mappingSize;
                 Character encodedChar = indexMap.get(wrappedIndex);
@@ -42,14 +43,15 @@ public class Encoder {
         String encodedTextUpper = encodedText.toUpperCase();
         StringBuilder builder = new StringBuilder(encodedText.length() - 1);
         Character offsetChar = encodedText.charAt(0);
-        Integer offsetIndex = characterMap.get(offsetChar);
+        Integer offset = characterMap.get(offsetChar);
 
         for (int i = 1; i < encodedTextUpper.length(); i++) {
             Character encodedChar = encodedTextUpper.charAt(i);
             Integer encodedCharIndex = characterMap.get(encodedChar);
+            boolean isCharDecodable = encodedCharIndex != null;
 
-            if (encodedCharIndex != null && offsetIndex != null) {
-                Character plainChar = indexMap.get((encodedCharIndex + offsetIndex) % mappingSize);
+            if (isCharDecodable) {
+                Character plainChar = indexMap.get((encodedCharIndex + offset) % mappingSize);
                 builder.append(plainChar);
             } else {
                 builder.append(encodedChar);
