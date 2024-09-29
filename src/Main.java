@@ -35,7 +35,7 @@ public class Main {
 
     private static String getUserOffset(Scanner scanner, ReferenceTable table) {
         String offsetChar = "";
-        Pattern pattern = Pattern.compile(table.getRegex());
+        Pattern pattern = table.getRegex();
 
         System.out.println("Enter offset character: ");
         while (!scanner.hasNext(pattern)) {

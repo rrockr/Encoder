@@ -3,13 +3,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class ReferenceTable {
     private HashMap<Integer, Character> indexMap;
     private HashMap<Character, Integer> characterMap;
     private int mappingSize;
     private String inputFilePath;
-    private String referenceRegex;
+    private Pattern referenceRegex;
 
     public ReferenceTable(String inputFilePath) {
         indexMap = new HashMap<>();
@@ -24,7 +26,7 @@ public class ReferenceTable {
         return this.mappingSize;
     }
 
-    public String getRegex() {
+    public Pattern getRegex() {
         return this.referenceRegex;
     }
 
@@ -50,13 +52,17 @@ public class ReferenceTable {
                 regexBuilder.append(refChar);
             }
             mappingSize = counter;
-            referenceRegex = String.format("[%s]", regexBuilder.toString());
+            referenceRegex = Pattern.compile(String.format("[%s]", regexBuilder.toString()));
+
         } catch (FileNotFoundException e) {
             System.err.println("Input file not found: " + e);
             e.printStackTrace();
             System.exit(1);
+        } catch (PatternSyntaxException e) {
+            System.err.println("Invalid regex: " + e);
+            e.printStackTrace();
         } catch (IOException e) {
-            System.err.println("Reader is closed: " + e);
+            System.err.println(e);
             e.printStackTrace();
         }
     }
